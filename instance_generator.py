@@ -5,6 +5,7 @@ import os
 import numpy as np
 import pandas as pd
 import logging
+import argparse
 from numpy.random import default_rng
 from collections import namedtuple
 from matplotlib import pyplot as plt
@@ -144,14 +145,20 @@ def save_to_dataframe(nodes, C, seed):
     df.to_pickle(f'./data/num_custs-{C}-seed-{seed}.pkl')
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Generate instances for the Shared Truckload Problem')
+    parser.add_argument('C', type=int, help='number of customers in problem')
+    parser.add_argument('seed', type=int, help='seed for random number generation')
+    args = parser.parse_args()
     data_path = 'data'
     if os.path.exists(data_path) is False:
         os.makedirs(data_path)
     image_path = 'images'
     if os.path.exists(image_path) is False:
         os.makedirs(image_path)
-    for C in range(5, 25, 1):
-        for seed in range(100):
-            data = generate_instance(C, seed)
-            #plot_instance(data)
-            save_to_dataframe(data, C, seed)
+    data = generate_instance(args.C, args.seed)
+    save_to_dataframe(data, args.C, args.seed)
+##    for C in range(5, 25, 1):
+##        for seed in range(100):
+##            data = generate_instance(C, seed)
+##            #plot_instance(data)
+##            save_to_dataframe(data, C, seed)
